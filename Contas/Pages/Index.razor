@@ -1,9 +1,40 @@
 ﻿@page "/"
+@inject DadosCarteiras dados
+<p>Data do Sistema:</p>
+<br>
+<p>@dados.DataDoSistema</p>
 
-<PageTitle>Index</PageTitle>
+<br><br>
+<p>Atualizar Data</p>
 
-<h1>Hello, world!</h1>
+<input type="datetime" @bind=dados.DataDoSistema></input>
 
-Welcome to your new app.
+<br>
+<button @onclick=cobrarTarifa >Cobrar Tarifas (Todas as Contas) </button>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+
+@code {
+    bool? cobrancasRealizadas = false;
+
+    public void cobrarTarifa()
+    {
+        if (dados.ListaDados is not null)
+        {
+            foreach (var item in dados.ListaDados)
+            {
+                if (item.Tarifa.Month < 0)
+                {
+                    item.cobrarTarifa(dados.DataDoSistema);
+                    continue;
+                }
+                if (item.Tarifa.Month < dados.DataDoSistema.Month)
+                {
+                    item.cobrarTarifa(dados.DataDoSistema);
+                    continue;
+                }
+            }
+        }
+        cobrancasRealizadas = true;
+    }
+
+}

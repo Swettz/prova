@@ -1,0 +1,71 @@
+﻿@inject DadosCarteiras dados
+
+<h3>Transferencia</h3>
+@if (transferenciaOk is null || transferenciaOk == false)
+{
+    <p>Conta Destino</p>
+<input type="text" @bind=contaDestino/>
+<br><br>
+<p>Valor da Transferencia</p>
+<input type="number" @bind=ValorTransferencia/>
+    @if (ValorTransferencia > 1000)
+    {
+        <p> Digite os 3 primeiros números do cpf da conta utilizada:</p>
+        <input type="text" @bind=CPF_Verificar />
+    }
+<br><br>
+<button @onclick=Transferir > Confirma Transferencia</button>
+}
+
+@if(transferenciaOk is not null)
+{
+    @if (transferenciaOk == true)
+    {
+        <h1>Deposito Realizado com sucesso!</h1>
+        <p>Resumo</p>
+        <br>
+        <p>Destino: @contaDestino</p>
+         <br>
+        <p>Valor: @ValorTransferencia</p>
+          <br>
+        <p>Data: @DateTime.Now.ToLongDateString() </p>
+
+    }
+    else
+    {
+       <h1>Erro! não foi possivel realizar está operação</h1>  
+    }
+}
+
+@code {
+        [Parameter]
+        public Carteira Conta { get; set; }
+        bool? transferenciaOk = null;
+        string contaDestino;
+        double ValorTransferencia;
+        string CPF_Verificar;
+
+
+        public void Transferir()
+        {
+            Carteira destino =  dados.ListaDados.FirstOrDefault(c => c.Dono == contaDestino);
+            if (destino is not null)
+            {
+                if (ValorTransferencia > 1000)
+                {
+                    if (CPF_Verificar != Conta.Cpf.Substring(0, 3))
+                    {
+                        transferenciaOk = false;
+                        return;
+                    }
+                }
+            Conta.Transferir(destino, ValorTransferencia);
+            transferenciaOk = true;
+            }
+        else
+        {
+            transferenciaOk = false;
+        }
+    }
+
+}

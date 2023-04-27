@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,9 +16,52 @@ namespace Contas.LibClasses
         }
         public string Dono { get; set; }
 
-        public bool Sacar(double Valor)
+        
+        public double LimiteConta  // adiciona o limite da conta
         {
+
+            get;
+            set;
+        }
+       
+        public DateTime Tarifa // adicionando a tafira
+        {
+            get;
+            set;
+        }
+        
+        public bool cobrarTarifa(DateTime dataTarifa)
+        {
+            this.Saldo -= 19.90;
+            this.Tarifa = dataTarifa;
+            return true;
+        }
+        public string Cpf// adiciona o cpf
+        {
+            get;
+            set;
+        }
+        
+        public bool Sacar(double Valor, DateTime dataSistema) //limita o horario para saque
+        {
+
+            if (!(DateTime.Now.Hour >= 8 && DateTime.Now.Hour < 18))
+                return false;
+
+
             if (Valor > this.Saldo)
+                return false;
+
+            this.Saldo -= Valor;
+            //this.Saldo = Saldo - Valor;
+            return true;
+        }
+
+        public bool Sacar(double Valor)
+		{
+
+
+			if (Valor > this.Saldo )
                 return false;
 
             this.Saldo -= Valor;
@@ -33,7 +77,7 @@ namespace Contas.LibClasses
 
         public bool Transferir
             (Carteira destino, double valor)
-        {  
+        {
             //se nao tiver saldo cancela transferencia retornando false
             if (this.Saldo <= valor)
                 return false;

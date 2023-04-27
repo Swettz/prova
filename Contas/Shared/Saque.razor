@@ -1,0 +1,41 @@
+﻿@inject DadosCarteiras dados
+
+@if (dados.DataDoSistema.Hour >= 8 && dados.DataDoSistema.Hour < 18)
+{
+    //só libera o botao caso esteja no horario cormecial
+    <h3>Dados para Saque</h3>
+    <br>
+    <br>
+    <p>Valor Para Saque:</p>
+    <input type="number" @bind="valor" />
+    <button @onclick="Sacar">Confirmar Saque </button>
+}
+else
+{
+    <p>Não é possivel realizar a operação fora horario comercial</p>
+}
+@if(SaqueOk is not null)
+{
+    @if (SaqueOk == true)
+
+    {
+        <h1>Saque Realizado com sucesso!</h1>
+    }
+    else
+    {
+       <h1>Erro! não foi possivel realizar está operação</h1>  
+    }
+
+}
+
+@code {
+    [Parameter]
+    public Carteira? Conta { get; set; }
+
+    private bool? SaqueOk = null;
+    private double valor;
+    private void Sacar()
+    {
+            SaqueOk = Conta.Sacar(valor);
+    }
+}
