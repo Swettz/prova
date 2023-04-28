@@ -45,11 +45,11 @@ namespace Contas.LibClasses
         public bool Sacar(double Valor, DateTime dataSistema) //limita o horario para saque
         {
 
-            if (!(DateTime.Now.Hour >= 8 && DateTime.Now.Hour < 18))
+            if (!(dataSistema.Hour >= 8 && dataSistema.Hour < 18))
                 return false;
 
 
-            if (Valor > this.Saldo)
+            if (Valor > (this.Saldo + LimiteConta ))
                 return false;
 
             this.Saldo -= Valor;

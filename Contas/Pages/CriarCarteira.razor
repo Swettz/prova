@@ -29,7 +29,6 @@
 @code {
 	private string nome;
 	private double valor;
-	private double valor2;
 	private double numerodaconta;
 	private string CPF;
 	private string mensagem = "";
@@ -37,7 +36,7 @@
 	{
 		Carteira novaConta = new Carteira();
 		novaConta.Dono = nome;
-		novaConta.Depositar(valor + (valor * 0.1));
+		novaConta.Depositar(valor);
 		novaConta.Cpf = CPF;
 		dados.ListaDados.Add(novaConta);
 		novaConta.LimiteConta = (valor * 0.1);
